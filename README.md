@@ -1,6 +1,6 @@
 Requirements:
 - python3
-- python3 modules discord.py, gspread, dateutil, ascyncio, re
+- python3 modules discord.py, gspread, dateutil, ascyncio, re, oauth2client, dateutil
 
 Usage:
 - python3 discordSheet.py
