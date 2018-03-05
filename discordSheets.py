@@ -20,11 +20,11 @@ discordClient = discord.Client()
 
 # Credentials for connecting to Google Drive API
 scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name('BFCPrices.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
 client = gspread.authorize(creds)
  
 # Connection to Google Sheet
-sheet = client.open("Billionaire Flip Club Price Sheet").sheet1
+sheet = client.open("sheet").sheet1
 
 #Get all items and margins from sheet
 def getAllItems():
@@ -204,4 +204,4 @@ async def on_message(message):
             await discordClient.send_message(message.channel, "Pin Updated!")
                 
 #Bot oauth2 authentication       
-discordClient.run('NDE4OTkyNzQyODI0NDExMTQ2.DXpqhQ.usKgr-sKnOBcohTVt3g69SAhIuo')
+discordClient.run('token')

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "bfcprices",
+  "private_key_id": "fe353d5372cfef9d5f3b954a681a7418328bb4a4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCgKAus7K2ThKL0\nndg/GUT7W0wJTnPNCoyH6YbGY0cXWkEuuab/+kOz8+XNGF2NLGVtAtZtOsSP4N0a\n7Y6EwUuaR0DV/yzUirqPzEjfE6tZ9eHCy5svnL7HtplImjQ7jt4XnyXHwMNdXw0A\n1iil0wtbRsr14B+cvZN+N2bHrq+aptGOa0EQG/38Jt1xsFTLTvqlJp3sYV7FlYXC\nOGd0gIEy/+shL6BDJPArEJuJycp7X+fYeB1T4eSMaBbVBZAxi8weDyGvZ6MpAr8Z\ncwdq/ucOhantMj3fQ5cv43sux75PFcnu/4Knk4zANHQFxjlHAsilL/Q52NDdPTMG\n50tZF68dAgMBAAECggEAJbqBU52W32FX3R3hHy42Aqu1fBzD6WnihLMF+a7SBMWR\nhO8d0QAVGmuqt1fV1AfBJf7M4kL9orJTjAAp+oqpo4DFHJSGLFS5Ed6LTSfuTh0/\nL5s05fC8PcJ9li2jf+NOXQy0AvxdWZ3ma4vH3BadPoWtEuKXN96uBAYLm59ChYEG\ni1+ff8P7CiNfzF1L2BFnEbewvXAneUOmuhTQ91qgwogNJDcXxUC/hh4XWNFPDCpu\naoYi14/SQswVtlDU9dByqWoSQjrBxxJxujVBEDy51OwP6bRmfuoNT6I4MppUkH97\nc32Pff4/oS8Kc7QSqlBMbgkMFKnqVzVUJeLmR3anyQKBgQDf3uM5a2VmzcYQwtdT\nHWlnRsYiBM7xtfPr3LLFaKVR5gYQacz5k2i3q01Vw5jX7vnEmolpfMwzQ8Y9hZjj\nwBl++TEUzLixf9sTti+RX9a0VAklg2QtZ1Xn7vnCwAfzr22L2MQkuuq1zfFR/r5E\n3Ffgn1bF8SeOZcQiBLjMp+VXGQKBgQC3JER/wSSQNORZ5H3tqdBIVJ5RVDzJkkro\nhM39ioJqyfNuJL/6H66LZroKkzZkgqp4JAbheldBUorVWEDlydL26MWID7s364ky\noztQpNB9BSWlARc7UHvrE7xaCDUw48P8Bqc7GAMtuCDW/c6fKOr1DOzKc1tphdFA\nA5HNxshspQKBgEv7Fv2vAJxyrI2Vw4UXD2YY9Dgpj58j1SSxJA+yI6H3QwmhDwuJ\nx1nHDxlTqHVpS2Y52PdvftLLZuYMiMaLtVuN8eWQUgMUVOOMyvo5H+LWPsB3prFu\nSA7O4gACMvC3EqQLLw8UTYLk4cmlfyhZ7I11JvtJjNZcncO5/IqhVUpJAoGAZpAb\nBGjH7zKPx3/cviJhkIBDAUzplgEljj4BlkHhc6iReVd/Y7Yma88l1RJIXdWHXize\n5Zs8DksJkR0Rix6R1NDa/q3ArTps5Tzg1PLYB4vAXz3TItaZ7zZoPwtlrnF/qj6X\nnNJ/xTTev0f4VM33dzC700zzHo9gdjcJinIOgDkCgYEAkqO8FYRY6B9CuSTn0dNL\nKRXfw/pSVFR9fHhwpeeO7y0tokmaqkF3LHEY5pXk45NjMPbIxXXXwqx8eLguKWmh\nQLppLjYL9rfF9rh/15Tjh6b6BlLh8r+WwIoXtUXsmMRe1R3e83Zdmub8UJAZo04N\nAhwam6HskkULMXyOfjAdzUE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "bfc-bot@bfcprices.iam.gserviceaccount.com",
+  "client_id": "101929465877901114120",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bfc-bot%40bfcprices.iam.gserviceaccount.com"
+}
