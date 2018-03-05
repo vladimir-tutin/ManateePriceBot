@@ -20,3 +20,6 @@ Commands:
 - !inb item price
 - !ins item price
 - !updatepin
+
+TODO:
+- Modify !add command to be able accept prices for initial add
