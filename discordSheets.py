@@ -1,3 +1,7 @@
+#"^!(\w*)\s(.*)\s((?:nib|ins)=\w*)\s((?:nis|inb)=\w*)$" <- for future use, will match
+#in the format of !add item nib/ins=price nis/inb=price
+
+
 import discord
 import asyncio
 import gspread
