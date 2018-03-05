@@ -18,5 +18,5 @@ Commands:
 - !nib item price
 - !nis item price
 - !inb item price
-!ins item price
-!updatepin
+- !ins item price
+- !updatepin
