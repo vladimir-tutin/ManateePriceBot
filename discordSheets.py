@@ -148,7 +148,7 @@ async def on_ready():
     
     #PIN SETUP
     pinMsg = updatePin()
-    pin = await discordClient.send_message(discord.Object(id="channel id"), "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
+    pin = await discordClient.send_message(discord.Object(id="channel id"), "```diff\n- Red refers to over four hours old \n" + pinMsg + "```")
     await discordClient.pin_message(pin)
     global pinID
     pinID = pin
