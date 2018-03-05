@@ -52,7 +52,8 @@ def getItemRow(itemList, itemSearch):
             i = index + 1
     print('Found', str(itemSearch), 'at row', i)
     return i
-    
+
+#Gets searched item prices and last update age    
 def getPrices(item):
     index = indexItems()
     try:
@@ -68,7 +69,8 @@ def getPrices(item):
     except:
         itemMargins = "Not found in the database, run _!add " + item + "_ to add it"
     return itemMargins
-    
+
+#Adds an item to the Google Spreadsheet    
 def addItem(item):
     print("Attempting to add", item)
     index = indexItems()
@@ -82,6 +84,7 @@ def addItem(item):
         print(item, "added to database")
     return "success"
        
+#Updates the items low or high price
 def setPrice(item, option, price):
     if option == "nib" or option == "ins":
         #check to make sure item exists first
@@ -174,13 +177,15 @@ async def on_message(message):
                 tmp = await discordClient.send_message(message.channel, msg)
             print("\n------------------------------")
 
+        #!price command
         if cmd == "price":
             print("!price command invoked")
             price = getPrices(args)
             msg = price
             await discordClient.send_message(message.channel, msg)
             print("\n------------------------------")
-            
+       
+        #!nib/nis/inb/ins command     
         if cmd == "nib" or cmd == "ins" or cmd == "nis" or cmd == "inb": 
             print("!nib/nis/ins/inb command invoked")
             item = re.search("^(.*)\s(\w*)$", args).group(1)
@@ -195,7 +200,8 @@ async def on_message(message):
                 editPinMsg = updatePin()
                 global pinID
                 await discordClient.edit_message(pinID, "```diff\n- Red refers to over 4 hours old \n" + editPinMsg + "```")
-                
+        
+        #!updatepin command        
         if cmd == "updatepin":
             print("!updatepin command invoked")
             print("Updating Pins")
