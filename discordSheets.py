@@ -1,7 +1,3 @@
-#"^!(\w*)\s(.*)\s((?:nib|ins)=\w*)\s((?:nis|inb)=\w*)$" <- for future use, will match
-#in the format of !add item nib/ins=price nis/inb=price
-
-
 import discord
 import asyncio
 import gspread
@@ -28,7 +24,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
 client = gspread.authorize(creds)
  
 # Connection to Google Sheet
-sheet = client.open("sheet").sheet1
+sheet = client.open("Sheet").sheet1
 
 #Get all items and margins from sheet
 def getAllItems():
@@ -56,8 +52,7 @@ def getItemRow(itemList, itemSearch):
             i = index + 1
     print('Found', str(itemSearch), 'at row', i)
     return i
-
-#Gets searched item prices and last update age    
+    
 def getPrices(item):
     index = indexItems()
     try:
@@ -73,9 +68,8 @@ def getPrices(item):
     except:
         itemMargins = "Not found in the database, run _!add " + item + "_ to add it"
     return itemMargins
-
-#Adds an item to the Google Spreadsheet    
-def addItem(item):
+    
+def addItem(item, lowPrice = None, highPrice = None):
     print("Attempting to add", item)
     index = indexItems()
     #check if item already exists
@@ -85,10 +79,13 @@ def addItem(item):
         return "already exists"
     except:
         sheet.update_cell((len(index) + 1), 1, item)
+        if lowPrice != None:
+            sheet.update_cell((len(index) + 1), 2, lowPrice)
+            sheet.update_cell((len(index) + 1), 3, highPrice)
+            sheet.update_cell((len(index) + 1), 4, str(datetime.datetime.today().strftime('%m/%d/%y %H:%M:%S')))
         print(item, "added to database")
     return "success"
        
-#Updates the items low or high price
 def setPrice(item, option, price):
     if option == "nib" or option == "ins":
         #check to make sure item exists first
@@ -152,7 +149,7 @@ async def on_ready():
     
     #PIN SETUP
     pinMsg = updatePin()
-    pin = await discordClient.send_message(discord.Object(id="channel id"), "```diff\n- Red refers to over four hours old \n" + pinMsg + "```")
+    pin = await discordClient.send_message(discord.Object(id="channel id"), "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
     await discordClient.pin_message(pin)
     global pinID
     pinID = pin
@@ -163,33 +160,42 @@ async def on_message(message):
     if message.content.startswith("!"):
         #Determine if command has args, command goes in cmd, args in args. Separate the args later 
         try:
-            cmdMsg = re.search("^!(\w*)\s(.*)$", message.content)
-            cmd = cmdMsg.group(1).lower()
-            args = cmdMsg.group(2)
+             cmdMsg = re.search("^!(\w*)\s(.*)$", message.content)
+             cmd = cmdMsg.group(1).lower()
+             args = cmdMsg.group(2)
         except:
-            cmdMsg = re.search("^!(.*)$", message.content)
-            cmd = cmdMsg.group(1)
+             cmdMsg = re.search("^!(.*)$", message.content)
+             cmd = cmdMsg.group(1)
                 
          #!add command
         if cmd == "add":
-            print("!add command invoked")
-            if addItem(args) == "already exists":
-                msg = args + " already exists in the database.\nYou can update it's prices with !NIB " + args + " PRICE or !NIS " + args + " PRICE"
-                tmp = await discordClient.send_message(message.channel, msg)
-            else:
-                msg = args + " added to the database, you can now add prices with !NIB and !NIS"
-                tmp = await discordClient.send_message(message.channel, msg)
-            print("\n------------------------------")
+            try:
+                item = re.search("^(.*)\s(?:nib=|ins=)\s*(\w*)\s(?:nis=|inb=)(\w*)$", args).group(1)
+                lowPrice = re.search("^(.*)\s(?:nib=|ins=)\s*(\w*)\s(?:nis=|inb=)(\w*)$", args).group(2)
+                highPrice = re.search("^(.*)\s(?:nib=|ins=)\s*(\w*)\s(?:nis=|inb=)(\w*)$", args).group(3)
+                if addItem(item, lowPrice, highPrice) == "already exists":
+                    msg = args + " already exists in the database.\nYou can update it's prices with !NIB " + args + " PRICE or !NIS " + args + " PRICE"
+                    await discordClient.send_message(message.channel, msg)
+                else:
+                    msg = item + " added to the database, you can now add prices with !NIB and !NIS"
+                    await discordClient.send_message(message.channel, msg)
+                    pinMsg = updatePin()
+                    await discordClient.edit_message(pinID, "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
+                    await discordClient.send_message(message.channel, "Pin Updated!")
+             
+            except:
+                item = args
+                if addItem(args) == "already exists":
+                    msg = args + " already exists in the database.\nYou can update it's prices with !NIB " + args + " PRICE or !NIS " + args + " PRICE"
+                    await discordClient.send_message(message.channel, msg)
 
-        #!price command
         if cmd == "price":
             print("!price command invoked")
             price = getPrices(args)
             msg = price
             await discordClient.send_message(message.channel, msg)
             print("\n------------------------------")
-       
-        #!nib/nis/inb/ins command     
+            
         if cmd == "nib" or cmd == "ins" or cmd == "nis" or cmd == "inb": 
             print("!nib/nis/ins/inb command invoked")
             item = re.search("^(.*)\s(\w*)$", args).group(1)
@@ -202,10 +208,8 @@ async def on_message(message):
                 msg = item + " " + cmd + " price updated to " + price
                 tmp = await discordClient.send_message(message.channel, msg)
                 editPinMsg = updatePin()
-                global pinID
                 await discordClient.edit_message(pinID, "```diff\n- Red refers to over 4 hours old \n" + editPinMsg + "```")
-        
-        #!updatepin command        
+                
         if cmd == "updatepin":
             print("!updatepin command invoked")
             print("Updating Pins")
