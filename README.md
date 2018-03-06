@@ -23,6 +23,6 @@ Commands:
 - !updatepin
 
 TODO:
-- Modify !add command to be able accept prices for initial add
 - Integrate with runescape.wikia.com to display item limits upon !price command
 - Create a "dictionary" to match misspellings and abbreviated item names
+- Add print()s for commands for verbose output of when functions are running
