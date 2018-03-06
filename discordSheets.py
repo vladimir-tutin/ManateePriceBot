@@ -68,7 +68,7 @@ def getPrices(item):
         currentTime = str(datetime.datetime.today().strftime('%m/%d/%y %H:%M:%S'))
         cTime = datetime.datetime.strptime(currentTime, '%m/%d/%y %H:%M:%S')
         rTime = datetime.datetime.strptime(lastUpdated, '%m/%d/%y %H:%M:%S')
-        diff = relativedelta(rTime, cTime)
+        diff = relativedelta(cTime, rTime)
         itemMargins = item + " Price: " + lowPrice + " - " + highPrice + "\nUpdate Age: Hours: " + str(diff.hours) + " Minutes: " + str(diff.minutes)
     except:
         itemMargins = "Not found in the database, run _!add " + item + "_ to add it"
@@ -225,7 +225,10 @@ async def on_message(message):
             print("Updating Pins")
             pinMsg = updatePin()
             await discordClient.edit_message(pinID, "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
-            # await discordClient.send_message(message.channel, "Pin Updated!")
+            await discordClient.send_message(message.channel, "Pin Updated!")
+            
+        if cmd == "help":
+            await discordClient.send_message(message.channel, "Bot Commands: \n!add item  | Add an item to the database \n!add item nib/ins=price nis/inb=price | Add an item to the database with prices \n!nib/nis/inb/ins item price | Update an items price \n!price item | Get an items price margins and update age \n!updatepin | Update the pin after changes were made directly to the database")
                 
 #Bot oauth2 authentication       
 discordClient.run(cfg.discordAuth)
