@@ -1,6 +1,7 @@
 Requirements:
 - python3
 - python3 modules discord.py, gspread, dateutil, ascyncio, re, oauth2client, dateutil
+- install via "pip install -r requirements.txt"
 
 Usage:
 - python3 discordSheet.py
