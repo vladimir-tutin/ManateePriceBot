@@ -15,6 +15,7 @@ Commands:
 - !help
 - !price item
 - !add item
+- !add item nib=price nis=price
 - !nib item price
 - !nis item price
 - !inb item price
