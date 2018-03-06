@@ -6,9 +6,10 @@ Requirements:
 Usage:
 - python3 discordSheet.py
 
-Install Notes:
-Update configData.py with the needed information, rename to configData.py
-
+Install Notes: 
+- Update configData.py with the needed information, rename 
+to configData.py
+ 
 Commands:
 - !help
 - !price item
