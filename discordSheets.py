@@ -154,7 +154,7 @@ async def on_ready():
     
     #PIN SETUP
     pinMsg = updatePin()
-    pin = await discordClient.send_message(discord.Object(id=cfg.channelID), "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
+    pin = await discordClient.send_message(discord.Object(id=cfg.channelID), "```diff\n- Red refers to over four hours old \n" + pinMsg + "```")
     await discordClient.pin_message(pin)
     global pinID
     pinID = pin
@@ -185,7 +185,7 @@ async def on_message(message):
                     msg = item + " added to the database, you can now add prices with !NIB and !NIS"
                     await discordClient.send_message(message.channel, msg)
                     pinMsg = updatePin()
-                    await discordClient.edit_message(pinID, "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
+                    await discordClient.edit_message(pinID, "```diff\n- Red refers to over four hours old \n" + pinMsg + "```")
                     await discordClient.send_message(message.channel, "Pin Updated!")
              
             except:
