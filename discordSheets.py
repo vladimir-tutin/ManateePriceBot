@@ -1,11 +1,16 @@
+import os
+import sys
 import discord
 import asyncio
 import gspread
 import re
 import datetime
-
 from dateutil.relativedelta import relativedelta
 from oauth2client.service_account import ServiceAccountCredentials
+
+scriptpath = "./configData.py"
+sys.path.append(os.path.abspath(scriptpath))
+import configData as cfg
 
 #STATIC VARIABLES
 ITEM = 1
@@ -20,11 +25,11 @@ discordClient = discord.Client()
 
 # Credentials for connecting to Google Drive API
 scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name(cfg.credFile, scope)
 client = gspread.authorize(creds)
  
 # Connection to Google Sheet
-sheet = client.open("Sheet").sheet1
+sheet = client.open(cfg.sheetName).sheet1
 
 #Get all items and margins from sheet
 def getAllItems():
@@ -149,7 +154,7 @@ async def on_ready():
     
     #PIN SETUP
     pinMsg = updatePin()
-    pin = await discordClient.send_message(discord.Object(id="channel id"), "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
+    pin = await discordClient.send_message(discord.Object(id=cfg.channelID), "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
     await discordClient.pin_message(pin)
     global pinID
     pinID = pin
@@ -218,4 +223,4 @@ async def on_message(message):
             await discordClient.send_message(message.channel, "Pin Updated!")
                 
 #Bot oauth2 authentication       
-discordClient.run('token')
+discordClient.run(cfg.discordAuth)
