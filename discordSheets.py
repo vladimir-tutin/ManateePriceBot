@@ -162,6 +162,8 @@ async def on_ready():
 @discordClient.event
 async def on_message(message):
     #Commands start with "!"
+    if message.content.startswith("?"):
+        print(pinID)
     if message.content.startswith("!"):
         #Determine if command has args, command goes in cmd, args in args. Separate the args later 
         try:
@@ -175,9 +177,12 @@ async def on_message(message):
          #!add command
         if cmd == "add":
             try:
-                item = re.search("^(.*)\s(?:nib=|ins=)\s*(\w*)\s(?:nis=|inb=)(\w*)$", args).group(1)
-                lowPrice = re.search("^(.*)\s(?:nib=|ins=)\s*(\w*)\s(?:nis=|inb=)(\w*)$", args).group(2)
-                highPrice = re.search("^(.*)\s(?:nib=|ins=)\s*(\w*)\s(?:nis=|inb=)(\w*)$", args).group(3)
+                item = re.search("^(.*)\s(?:nib|nis)=(.*)\s(?:nis|inb)=(.*)$", args).group(1)
+                lowPrice = re.search("^(.*)\s(?:nib|nis)=(.*)\s(?:nis|inb)=(.*)$", args).group(2)
+                highPrice = re.search("^(.*)\s(?:nib|nis)=(.*)\s(?:nis|inb)=(.*)$", args).group(3)
+                print(item)
+                print(lowPrice)
+                print(highPrice)
                 if addItem(item, lowPrice, highPrice) == "already exists":
                     msg = args + " already exists in the database.\nYou can update it's prices with !NIB " + args + " PRICE or !NIS " + args + " PRICE"
                     await discordClient.send_message(message.channel, msg)
@@ -203,8 +208,8 @@ async def on_message(message):
             
         if cmd == "nib" or cmd == "ins" or cmd == "nis" or cmd == "inb": 
             print("!nib/nis/ins/inb command invoked")
-            item = re.search("^(.*)\s(\w*)$", args).group(1)
-            price = re.search("^(.*)\s(\w*)$", args).group(2)
+            item = re.search("^(.*)\s(.*)$", args).group(1)
+            price = re.search("^(.*)\s(.*)$", args).group(2)
             status = setPrice(item, cmd, price)
             if status == "no item":
                 msg = item + " doesn't exist in database.\n Add it with !add " + item
@@ -220,7 +225,7 @@ async def on_message(message):
             print("Updating Pins")
             pinMsg = updatePin()
             await discordClient.edit_message(pinID, "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
-            await discordClient.send_message(message.channel, "Pin Updated!")
+            # await discordClient.send_message(message.channel, "Pin Updated!")
                 
 #Bot oauth2 authentication       
 discordClient.run(cfg.discordAuth)
