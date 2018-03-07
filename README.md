@@ -25,3 +25,6 @@ TODO:
 - Integrate with runescape.wikia.com to display item limits upon !price command
 - Create a "dictionary" to match misspellings and abbreviated item names
 - Add print()s for commands for verbose output of when functions are running
+
+Issues:
+- Seemingly after an hour the credentials to authenticate to Google Sheets expire, need to add handling to renew if a 401 error code is thrown
