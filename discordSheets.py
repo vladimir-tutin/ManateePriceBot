@@ -24,15 +24,22 @@ pinID = None
 discordClient = discord.Client()
 
 # Credentials for connecting to Google Drive API
-scope = ['https://spreadsheets.google.com/feeds']
-creds = ServiceAccountCredentials.from_json_keyfile_name(cfg.credFile, scope)
-client = gspread.authorize(creds)
+
  
 # Connection to Google Sheet
-sheet = client.open(cfg.sheetName).sheet1
+
+
+def getSheet(flag = False):
+    scope = ['https://spreadsheets.google.com/feeds']
+    creds = ServiceAccountCredentials.from_json_keyfile_name(cfg.credFile, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open(cfg.sheetName).sheet1
+    print(str(creds.access_token_expired))
+    return sheet
 
 #Get all items and margins from sheet
 def getAllItems():
+    sheet = getSheet()
     index = indexItems()
     w, h = 4, len(index);
     allItemList = [[0 for x in range(w)] for y in range(h)] 
@@ -45,6 +52,7 @@ def getAllItems():
 
 #index the Items in the sheet
 def indexItems():
+    sheet = getSheet()
     item_list = list(filter(None, sheet.col_values(ITEM)))
     return item_list
   
@@ -59,6 +67,7 @@ def getItemRow(itemList, itemSearch):
     return i
     
 def getPrices(item):
+    sheet = getSheet()
     index = indexItems()
     try:
         itemRow = getItemRow(index, item)
@@ -69,12 +78,15 @@ def getPrices(item):
         cTime = datetime.datetime.strptime(currentTime, '%m/%d/%y %H:%M:%S')
         rTime = datetime.datetime.strptime(lastUpdated, '%m/%d/%y %H:%M:%S')
         diff = relativedelta(cTime, rTime)
-        itemMargins = item + " Price: " + lowPrice + " - " + highPrice + "\nUpdate Age: Hours: " + str(diff.hours) + " Minutes: " + str(diff.minutes)
+        print(diff.days)
+        print(diff.hours)
+        itemMargins = item + " Price: " + lowPrice + " - " + highPrice + "\nUpdate Age: Hours: " + str(diff.hours + (diff.days * 24)) + " Minutes: " + str(diff.minutes)
     except:
         itemMargins = "Not found in the database, run _!add " + item + "_ to add it"
     return itemMargins
     
 def addItem(item, lowPrice = None, highPrice = None):
+    sheet = getSheet()
     print("Attempting to add", item)
     index = indexItems()
     #check if item already exists
@@ -92,6 +104,7 @@ def addItem(item, lowPrice = None, highPrice = None):
     return "success"
        
 def setPrice(item, option, price):
+    sheet = getSheet()
     if option == "nib" or option == "ins":
         #check to make sure item exists first
         try:
@@ -137,7 +150,7 @@ def updatePin():
             cTime = datetime.datetime.strptime(currentTime, '%m/%d/%y %H:%M:%S')
             rTime = datetime.datetime.strptime(rowTime, '%m/%d/%y %H:%M:%S')
             diff = relativedelta(cTime, rTime)
-            if diff.hours >= 4:
+            if (diff.hours + (diff.days * 24)) >= 4:
                 flag = "- "
             else:
                 flag = "+ "
@@ -229,6 +242,8 @@ async def on_message(message):
             
         if cmd == "help":
             await discordClient.send_message(message.channel, "Bot Commands: \n!add item  | Add an item to the database \n!add item nib/ins=price nis/inb=price | Add an item to the database with prices \n!nib/nis/inb/ins item price | Update an items price \n!price item | Get an items price margins and update age \n!updatepin | Update the pin after changes were made directly to the database")
-                
+        
+
+        
 #Bot oauth2 authentication       
 discordClient.run(cfg.discordAuth)
