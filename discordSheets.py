@@ -8,6 +8,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from oauth2client.service_account import ServiceAccountCredentials
 
+#Config file
 scriptpath = "./configData.py"
 sys.path.append(os.path.abspath(scriptpath))
 import configData as cfg
@@ -18,23 +19,18 @@ LOW = 2
 HIGH = 3
 LAST_UPDATED = 4
 
-#Global Variable
+#Pinned message ID, gets set upon first run
 pinID = None
 
 discordClient = discord.Client()
 
-# Credentials for connecting to Google Drive API
 
- 
 # Connection to Google Sheet
-
-
-def getSheet(flag = False):
+def getSheet():
     scope = ['https://spreadsheets.google.com/feeds']
     creds = ServiceAccountCredentials.from_json_keyfile_name(cfg.credFile, scope)
     client = gspread.authorize(creds)
     sheet = client.open(cfg.sheetName).sheet1
-    print(str(creds.access_token_expired))
     return sheet
 
 #Get all items and margins from sheet
@@ -102,7 +98,18 @@ def addItem(item, lowPrice = None, highPrice = None):
             sheet.update_cell((len(index) + 1), 4, str(datetime.datetime.today().strftime('%m/%d/%y %H:%M:%S')))
         print(item, "added to database")
     return "success"
-       
+
+def removeItem(item):
+    sheet = getSheet()
+    index = indexItems()
+    try:
+        itemRow = getItemRow(index, item)
+        sheet.delete_row(itemRow)
+        print(item, "removed from database")
+        return "success"
+    except:
+        return "fail"
+    
 def setPrice(item, option, price):
     sheet = getSheet()
     if option == "nib" or option == "ins":
@@ -200,11 +207,14 @@ async def on_message(message):
                     msg = args + " already exists in the database.\nYou can update it's prices with !NIB " + args + " PRICE or !NIS " + args + " PRICE"
                     await discordClient.send_message(message.channel, msg)
                 else:
-                    msg = item + " added to the database, you can now add prices with !NIB and !NIS"
-                    await discordClient.send_message(message.channel, msg)
-                    pinMsg = updatePin()
-                    await discordClient.edit_message(pinID, "```diff\n- Red refers to over four hours old \n" + pinMsg + "```")
-                    await discordClient.send_message(message.channel, "Pin Updated!")
+                    if "=" not in item:
+                        msg = item + " added to the database, you can now add prices with !NIB and !NIS"
+                        await discordClient.send_message(message.channel, msg)
+                        pinMsg = updatePin()
+                        await discordClient.edit_message(pinID, "```diff\n- Red refers to over four hours old \n" + pinMsg + "```")
+                        await discordClient.send_message(message.channel, "Pin Updated!")
+                    else:
+                        discordClient.send_message(message.channel, "Incorrect !add command format. Run !help to see all commands")
              
             except:
                 item = args
@@ -239,7 +249,16 @@ async def on_message(message):
             pinMsg = updatePin()
             await discordClient.edit_message(pinID, "```diff\n- Red refers to over an hour old \n" + pinMsg + "```")
             await discordClient.send_message(message.channel, "Pin Updated!")
-            
+        
+        if cmd == "remove":
+            item = args
+            if removeItem(item) == "success":
+                await discordClient.sent_message(message.channel, item + " removed from database!")
+                editPinMsg = updatePin()
+                await discordClient.edit_message(pinID, pinID, "```diff\n- Red refers to over 4 hours old \n" + editPinMsg + "```")
+            else:
+                await discordClient.send_message(message.channel, item + " not found in database")
+        
         if cmd == "help":
             await discordClient.send_message(message.channel, "Bot Commands: \n!add item  | Add an item to the database \n!add item nib/ins=price nis/inb=price | Add an item to the database with prices \n!nib/nis/inb/ins item price | Update an items price \n!price item | Get an items price margins and update age \n!updatepin | Update the pin after changes were made directly to the database")
         
