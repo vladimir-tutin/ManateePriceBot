@@ -57,7 +57,7 @@ def getItemRow(itemList, itemSearch):
     i = 0
     print('Searching for', str(itemSearch))
     for index, elem in enumerate(itemList):
-        if str(elem) == str(itemSearch):
+        if str(elem).lower() == str(itemSearch).lower():
             i = index + 1
     print('Found', str(itemSearch), 'at row', i)
     return i
@@ -107,7 +107,8 @@ def removeItem(item):
         sheet.delete_row(itemRow)
         print(item, "removed from database")
         return "success"
-    except:
+    except Exception as e:
+        print(e)
         return "fail"
     
 def setPrice(item, option, price):
@@ -115,19 +116,15 @@ def setPrice(item, option, price):
     if option == "nib" or option == "ins":
         #check to make sure item exists first
         try:
-            if sheet.find(item):
-                itemExists = True
-        except:
-            print(item, "doesnt exist in database")
-            return "no item"
-        
-        if itemExists == True:
             itemList = indexItems()
             itemRow = getItemRow(itemList, item)
             sheet.update_cell(itemRow, LOW, price)
             time = str(datetime.datetime.today().strftime('%m/%d/%y %H:%M:%S'))
             sheet.update_cell(itemRow, LAST_UPDATED, time)
             return "updated"
+        except:
+            print(item, "doesnt exist in database")
+            return "no item"
     elif option == "nis" or option == "inb":
         #check to make sure item exists first
         try:
