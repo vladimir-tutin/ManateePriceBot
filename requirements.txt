@@ -1,5 +1,5 @@
 asyncio==3.4.3
-certifi==2018.1.18
+certifi==2022.12.7
 chardet==3.0.4
 google-api-python-client==1.6.5
 gspread==0.6.2
